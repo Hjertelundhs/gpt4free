@@ -39,10 +39,10 @@ class Phind(AsyncGeneratorProvider):
             prompt = messages[-1]["content"]
             data = {
                 "question": prompt,
-                "questionHistory": [
+                "question_history": [
                     message["content"] for message in messages[:-1] if message["role"] == "user"
                 ],
-                "answerHistory": [
+                "answer_history": [
                     message["content"] for message in messages if message["role"] == "assistant"
                 ],
                 "webResults": [],
@@ -55,16 +55,20 @@ class Phind(AsyncGeneratorProvider):
                     "creativeMode": creative_mode,
                     "customLinks": []
                 },
-                "context": "",
+                "context": "\n".join([message["content"] for message in messages if message["role"] == "system"]),
                 "rewrittenQuestion": prompt,
                 "challenge": 0.21132115912208504
             }
-            async with session.post(f"{cls.url}/api/infer/followup/answer", headers=headers, json=data) as response:
+            async with session.post(f"https://https.api.phind.com/infer/", headers=headers, json=data) as response:
                 new_line = False
                 async for line in response.iter_lines():
                     if line.startswith(b"data: "):
                         chunk = line[6:]
-                        if chunk.startswith(b"<PHIND_METADATA>") or chunk.startswith(b"<PHIND_INDICATOR>"):
+                        if chunk.startswith(b'<PHIND_DONE/>'):
+                            break
+                        if chunk.startswith(b'<PHIND_WEBRESULTS>') or chunk.startswith(b'<PHIND_FOLLOWUP>'):
+                            pass
+                        elif chunk.startswith(b"<PHIND_METADATA>") or chunk.startswith(b"<PHIND_INDICATOR>"):
                             pass
                         elif chunk:
                             yield chunk.decode()

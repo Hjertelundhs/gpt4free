@@ -69,7 +69,7 @@ def get_secret() -> str:
     include = f'{dir}/npm/node_modules/crypto-js/crypto-js'
     source = """
 CryptoJS = require({include})
-var k = '14487141bvirvvG'
+var k = 'fjfsdwiuhfwf'
     , e = Math.floor(new Date().getTime() / 1e3);
 var t = CryptoJS.enc.Utf8.parse(e)
     , o = CryptoJS.AES.encrypt(t, k, {

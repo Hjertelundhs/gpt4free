@@ -1,3 +1,6 @@
+Please provide feedback so this project can be improved, it would be much appreciated  
+form: https://forms.gle/FeWV9RLEedfdkmFN6
+
 ![248433934-7886223b-c1d1-4260-82aa-da5741f303bb](https://github.com/xtekky/gpt4free/assets/98614666/ea012c87-76e0-496a-8ac4-e2de090cc6c9)
 Written by [@xtekky](https://github.com/hlohaus) & maintained by [@hlohaus](https://github.com/hlohaus)
 
@@ -6,13 +9,26 @@ Written by [@xtekky](https://github.com/hlohaus) & maintained by [@hlohaus](http
 > By using this repository or any code related to it, you agree to the [legal notice](LEGAL_NOTICE.md). The author is not responsible for any copies, forks, re-uploads made by other users, or anything else related to GPT4Free. This is the author's only account and repository. To prevent impersonation or irresponsible actions, please comply with the GNU GPL license this Repository uses.
 
 > [!Note]
-<sup><strong>Lastet version:</strong></sup> [![PyPI version](https://img.shields.io/pypi/v/g4f?color=blue)](https://pypi.org/project/g4f) [![Docker version](https://img.shields.io/docker/v/hlohaus789/g4f?label=docker&color=blue)](https://hub.docker.com/r/hlohaus789/g4f)
+<sup><strong>Lastet version:</strong></sup> [![PyPI version](https://img.shields.io/pypi/v/g4f?color=blue)](https://pypi.org/project/g4f) [![Docker version](https://img.shields.io/docker/v/hlohaus789/g4f?label=docker&color=blue)](https://hub.docker.com/r/hlohaus789/g4f)  
+> <sup><strong>Stats:</strong></sup>  [![Downloads](https://static.pepy.tech/badge/g4f)](https://pepy.tech/project/g4f) [![Downloads](https://static.pepy.tech/badge/g4f/month)](https://pepy.tech/project/g4f)
+
 ```sh
 pip install -U g4f
 ```
 ```sh
 docker pull hlohaus789/g4f
 ```
+# To do
+As per the survey, here is a list of improvements to come
+- [ ] Improve Documentation (on g4f.mintlify.app) & Do video tutorials
+- [ ] Improve the provider status list & updates
+- [ ] Tutorials on how to reverse sites to write your own wrapper (PoC only ofc)
+- [ ] Improve the Bing wrapper. (might write a new wrapper in golang as it is very fast)
+- [ ] Write a standard provider performance test to improve the stability
+- [ ] update the repository to include the new openai library syntax (ex: `Openai()` class)
+- [ ] Potential support and development of local models
+- [ ] improve compatibility and error handling
+
 
 ## 🆕 What's New
 - <a href="./README-DE.md"><img src="https://img.shields.io/badge/öffnen in-🇩🇪 deutsch-bleu.svg" alt="Öffnen en DE"></a>
@@ -32,6 +48,7 @@ docker pull hlohaus789/g4f
       - [Install using pypi](#install-using-pypi)
     + [Docker for Developers](#docker-for-developers)
 - [💡 Usage](#-usage)
+  * [The Web UI](#the-web-ui)
   * [The `g4f` Package](#the-g4f-package)
     + [ChatCompletion](#chatcompletion)
       - [Completion](#completion)
@@ -63,7 +80,7 @@ docker pull hlohaus789/g4f
 ##### Quick start:
 
 1. [Download and install Docker](https://docs.docker.com/get-docker/)
-2. Pull lastet image and run the container:
+2. Pull latest image and run the container:
 
 ```sh
 docker pull hlohaus789/g4f
@@ -176,6 +193,14 @@ docker-compose down
 > When using Docker, any changes you make to your local files will be reflected in the Docker container thanks to the volume mapping in the `docker-compose.yml` file. If you add or remove dependencies, however, you'll need to rebuild the Docker image using `docker-compose build`.
 
 ## 💡 Usage
+
+### The Web UI
+
+To use it in the web interface, type the following codes in the command line.
+```python3
+from g4f.gui import run_gui
+run_gui()
+```
 
 ### The `g4f` Package
 
@@ -401,6 +426,26 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+##  API usage (POST)
+#### Chat completions
+Send the POST request to /v1/chat/completions with body containing the `model` method. This example uses python with requests library:
+```python
+import requests
+url = "http://localhost:1337/v1/chat/completions"
+body = {
+    "model": "gpt-3.5-turbo-16k",
+    "stream": False,
+    "messages": [
+        {"role": "assistant", "content": "What can you do?"}
+    ]
+}
+json_response = requests.post(url, json=body).json().get('choices', [])
+
+for choice in json_response:
+    print(choice.get('message', {}).get('content', ''))
+```
+
 
 ## 🚀 Providers and Models
 
